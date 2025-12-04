@@ -1,0 +1,71 @@
+
+
+</div>
+<div>
+    <label>CourseId: <input id="courseId" value="1"/></label>
+</div>
+<div>
+    <button onclick="connect()">Connect</button>
+    <button onclick="disconnect()">Disconnect</button>
+</div>
+<div>
+    <ul id="messages"></ul>
+</div>
+<div>
+    <input id="msg" style="width:400px"/>
+    <button onclick="sendCourse()">Send to course</button>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+<script>
+    let stompClient = null;
+
+
+    function connect() {
+        const token = document.getElementById('token').value;
+        const courseId = document.getElementById('courseId').value;
+        const socket = new SockJS('/ws-chat?token=' + encodeURIComponent(token));
+        stompClient = Stomp.over(socket);
+        stompClient.connect({}, function (frame) {
+            console.log('Connected: ' + frame);
+            stompClient.subscribe('/topic/course.' + courseId, function (message) {
+                const body = JSON.parse(message.body);
+                showMessage(body.sender + ': ' + body.content + ' (' + body.sentAt + ')');
+            });
+
+
+            stompClient.subscribe('/user/queue/messages', function (message) {
+                const body = JSON.parse(message.body);
+                showMessage('[PRIV] ' + body.sender + ': ' + body.content);
+            });
+        }, function(error) {
+            console.error('STOMP error', error);
+            alert('STOMP connection error: ' + JSON.stringify(error));
+        });
+    }
+
+
+    function disconnect() {
+        if (stompClient !== null) stompClient.disconnect();
+        console.log('Disconnected');
+    }
+
+
+    function sendCourse() {
+        const courseId = document.getElementById('courseId').value;
+        const content = document.getElementById('msg').value;
+        stompClient.send('/app/course/' + courseId + '/send', {}, JSON.stringify({content: content}));
+    }
+
+
+    function showMessage(text) {
+        const ul = document.getElementById('messages');
+        const li = document.createElement('li');
+        li.appendChild(document.createTextNode(text));
+        ul.appendChild(li);
+    }
+</script>
+</body>
+</html>
