@@ -22,7 +22,7 @@ import java.util.Random;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/admin/dashboard")
+@RequestMapping("/api/v1")
 @PreAuthorize("isAuthenticated()")
 @SecurityRequirement(name = "BearerAuth")
 public class ProfileController {
@@ -34,9 +34,9 @@ public class ProfileController {
 
     @PostMapping(value = "/profile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public AuthUserDto updateProfile(
-            @RequestParam MultipartFile profileImage,
-            @RequestParam String fullName,
-            @RequestParam String phoneNumber
+            @RequestParam(required = false) MultipartFile profileImage,
+            @RequestParam(required = false) String fullName,
+            @RequestParam(required = false) String phoneNumber
     ) {
         UpdateProfileDto dto = new UpdateProfileDto();
         dto.setProfileImage(profileImage);

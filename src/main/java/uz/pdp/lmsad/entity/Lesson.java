@@ -29,6 +29,9 @@ public class Lesson extends BaseEntity {
     private Module module;
 
 
+    @Column(length = 10000000)
+    private String transcribe;
+
     @Builder.Default
     @OneToMany(mappedBy = "lesson",cascade = CascadeType.ALL)
     private List<Assignment> assignments = new ArrayList<>();

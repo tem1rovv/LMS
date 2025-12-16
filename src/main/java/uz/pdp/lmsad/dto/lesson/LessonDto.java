@@ -13,4 +13,6 @@ public class LessonDto {
     private String contentUrl;
     private Integer orderIndex;
     private String moduleId;
+    private String transcribe;
+
 }

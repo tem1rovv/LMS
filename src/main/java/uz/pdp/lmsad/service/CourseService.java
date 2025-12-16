@@ -107,13 +107,13 @@ public class CourseService
         Course course = repository.findById(id).orElseThrow(() -> new RuntimeException("Course Not Found"));
         repository.delete(id);
     }
-
+    @CacheEvict(cacheNames = "courses")
     public void activateCourse(String id) {
         Course course = repository.findById(id).orElseThrow(() -> new RuntimeException("Course Not Found"));
         course.setStatus(CourseStatus.ACTIVE);
         repository.save(course);
     }
-
+    @CacheEvict(cacheNames = "courses")
     public void inActivateCourse(String id) {
         Course course = repository.findById(id).orElseThrow(() -> new RuntimeException("Course Not Found"));
         course.setStatus(CourseStatus.INACTIVE);

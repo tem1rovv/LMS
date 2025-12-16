@@ -52,6 +52,7 @@ public class AuthService extends
         Role role = roleRepository.findByRoleName(RoleName.USER).orElseThrow(
                 () -> new RuntimeException("Role not Found")
         );
+        authUser.setImageUrl("https://api.telegram.org/file/bot8501886143:AAHiFYRUoM-MmmaBh-UwNtUJrrUv7mJssXM/thumbnails/file_3.jpg");
         authUser.setPassword(passwordEncoder.encode(dto.getPassword()));
         authUser.getRoles().add(role);
         return mapper.toDto(repository.save(authUser));

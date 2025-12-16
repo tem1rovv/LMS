@@ -34,8 +34,12 @@ public class ProfileService {
 
     public AuthUserDto updateProfile(String id, UpdateProfileDto dto) {
         AuthUser authUser = authUserRepository.findById(id).orElseThrow();
-        authUser.setFullName(dto.getFullName());
-        authUser.setPhoneNumber(dto.getPhoneNumber());
+        if (dto.getFullName() != null) {
+            authUser.setFullName(dto.getFullName());
+        }
+        if (dto.getPhoneNumber() != null) {
+            authUser.setPhoneNumber(dto.getPhoneNumber());
+        }
         if (dto.getProfileImage() != null) {
             String imageUrl = telegramService.uploadFileToTelegram(dto.getProfileImage());
             authUser.setImageUrl(imageUrl);

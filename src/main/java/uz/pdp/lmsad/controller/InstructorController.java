@@ -69,6 +69,7 @@ public class InstructorController {
         return ResponseEntity.noContent().build();
     }
 
+
     @PatchMapping("/courses/{id}/activate")
     public ResponseEntity<?> activateCourse(@PathVariable String id) {
         courseService.activateCourse(id);
